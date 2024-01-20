@@ -4,8 +4,8 @@ USE exam_portal;
 
 
 
-CREATE TABLE IF NOT EXISTS User (
-    user_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS user (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS User (
 );
 
 
-CREATE TABLE IF NOT EXISTS Exam (
-    exam_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS exam (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     duration INT NOT NULL,
@@ -23,41 +23,41 @@ CREATE TABLE IF NOT EXISTS Exam (
 );
 
 
-CREATE TABLE IF NOT EXISTS Question (
-    question_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS question (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     exam_id INT,
     text TEXT NOT NULL,
     question_type VARCHAR(50) NOT NULL,
-    FOREIGN KEY (exam_id) REFERENCES Exam(exam_id)
+    FOREIGN KEY (exam_id) REFERENCES exam(id)
 );
 
-CREATE TABLE IF NOT EXISTS Option (
-    option_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS answer_option (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     question_id INT,
     text VARCHAR(255) NOT NULL,
     is_correct BOOLEAN NOT NULL,
-    FOREIGN KEY (question_id) REFERENCES Question(question_id)
+    FOREIGN KEY (question_id) REFERENCES question(id)
 );
 
-CREATE TABLE IF NOT EXISTS Answer (
-    answer_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS answer (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     question_id INT,
     user_id INT,
     option_id INT,
     text TEXT,
     student_response TEXT,
-    FOREIGN KEY (question_id) REFERENCES Question(question_id),
-    FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (option_id) REFERENCES Option(option_id)
+    FOREIGN KEY (question_id) REFERENCES question(id),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (option_id) REFERENCES answer_option(id)
 );
 
-CREATE TABLE IF NOT EXISTS UserExamAttempt (
+CREATE TABLE IF NOT EXISTS user_exam_attempt (
     attempt_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     exam_id INT,
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
     score INT,
-    FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (exam_id) REFERENCES Exam(exam_id)
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (exam_id) REFERENCES exam(id)
 );
